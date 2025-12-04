@@ -298,43 +298,43 @@
             }
         }
 
-        /* --- FLOATING LANGUAGE BUTTON --- */
-        .lang-fab {
+        /* --- FLOATING LANGUAGE BUTTON (ALBANIA.HTML STYLE) --- */
+        .lang-fab-new {
             position: fixed;
             bottom: 2rem;
             left: 2rem;
             z-index: 50;
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
-            gap: 10px;
         }
-        .lang-fab-main {
-            width: 3.5rem;
-            height: 3.5rem;
+        .lang-toggle-btn {
+            background: #050B14;
+            background: rgba(5, 11, 20, 0.7); /* Match albania.html button background */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #E2E8F0;
+            padding: 0.75rem 1.25rem;
             border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
+            gap: 0.75rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
-        .lang-fab-main:hover {
-            background: rgba(59, 130, 246, 0.3);
-            transform: scale(1.05);
-            border-color: #3B82F6;
+        .lang-toggle-btn:hover {
+            background: rgba(5, 11, 20, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
         }
-        .lang-menu {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        .lang-toggle-btn.active .fa-chevron-up {
+            transform: rotate(180deg);
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 1rem;
+            width: 12rem;
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(16px);
@@ -343,12 +343,16 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            min-width: 140px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.9);
+            transform-origin: bottom left; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .lang-menu.active {
+        .lang-toggle-btn.active + .language-dropdown {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0);
+            transform: scale(1);
         }
         .lang-option {
             padding: 0.5rem 1rem;
@@ -360,6 +364,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-align: left;
         }
         .lang-option:hover {
             background: rgba(255, 255, 255, 0.1);
@@ -370,6 +375,9 @@
             color: #3B82F6;
             font-weight: 600;
         }
+        /* End New FAB Styles */
+
+        /* Removed old FAB pulse keyframes as they are no longer used */
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative" id="page-body">
@@ -401,7 +409,7 @@
                             </h1>
                     </div>
                     
-                    <h2 data-i18n="hero_subtitle" class="text-xl md:text-2xl font-medium text-brand-gold tracking-[0.4em] md:tracking-[0.8em] uppercase mt-4 opacity-80 border-t border-b border-white/10 py-5 px-8 md:px-16 inline-block backdrop-blur-sm relative z-20">
+                    <h2 data-i18n="hero_subtitle" class="text-lg md:text-2xl font-medium text-brand-gold tracking-[0.3em] md:tracking-[0.8em] uppercase mt-4 opacity-80 border-t border-b border-white/10 py-3 px-6 md:px-16 inline-block backdrop-blur-sm relative z-20">
                         Leap in to the Future
                     </h2>
 
@@ -411,7 +419,7 @@
                     <div onclick="toggleSearch()" class="group relative cursor-text transform hover:-translate-y-1 transition-transform duration-300">
                         <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-gold rounded-full opacity-30 group-hover:opacity-60 blur transition duration-500"></div>
                         
-                        <div class="relative flex items-center bg-[#0B1221] border border-white/10 rounded-full p-6 shadow-2xl">
+                        <div class="relative flex items-center bg-[#0B1221] border border-white/10 rounded-full p-4 shadow-2xl">
                             <div class="pl-4 pr-4 text-brand-gold">
                                 <i class="fa-solid fa-magnifying-glass text-2xl"></i>
                             </div>
@@ -445,7 +453,7 @@
 
         <section id="programs" class="py-16 relative">
             <div class="container mx-auto px-4">
-                <div class="max-w-4xl mx-auto text-center mb-16 reveal-item">
+                <div class="max-w-4xl mx-auto text-center mb-12 reveal-item">
                     <span data-i18n="sec_dest_focus" class="text-brand-gold font-bold tracking-[0.2em] text-base uppercase mb-4 block">Destination Focus</span>
                     <h2 data-i18n="sec_dest_title" class="text-5xl md:text-5xl font-bold text-white">Our Exclusive Mobility Programs</h2>
                 </div>
@@ -608,7 +616,7 @@
             </div>
         </section>
 
-        <section id="process" class="hidden lg:block py-16 relative">
+        <section id="process" class="py-16 relative">
             <div class="container mx-auto px-4">
                 <div class="max-w-4xl mx-auto text-center mb-16 reveal-item">
                     <span data-i18n="sec_methodology" class="text-brand-blue font-bold tracking-[0.2em] text-sm uppercase mb-4 block">Methodology</span>
@@ -678,41 +686,41 @@
         </section>
     </main>
 
-    <!-- WhatsApp Button -->
     <a href="https://wa.me/971503666382" target="_blank" class="fixed bottom-8 right-8 z-50 bg-[#25D366] text-white w-20 h-20 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 hover:scale-110 group animate-pulse" rel="noopener noreferrer">
         <i class="fa-brands fa-whatsapp text-4xl"></i>
     </a>
 
-    <!-- Floating Language Button -->
-    <div class="lang-fab">
-        <div class="lang-fab-main" onclick="toggleLangMenu()">
-            <i class="fa-solid fa-globe text-2xl"></i>
+    <div class="lang-fab-new">
+        <div id="lang-toggle-btn" onclick="toggleLanguageDropdown(event)" class="lang-toggle-btn">
+            <i class="fa-solid fa-globe text-xl text-brand-gold transition-colors"></i>
+            <span class="font-bold text-sm uppercase tracking-wider hidden sm:block">Language</span>
+            <i class="fa-solid fa-chevron-up text-xs opacity-70 transition-transform duration-300"></i>
         </div>
-        <div class="lang-menu" id="langMenu">
-            <div class="lang-option active" onclick="changeLanguage('en', this)">
+        
+        <div id="language-dropdown" class="language-dropdown">
+            <button onclick="changeLanguage('en', this)" class="lang-option active">
                 <span>🇺🇸</span> English
-            </div>
-            <div class="lang-option" onclick="changeLanguage('hi', this)">
+            </button>
+            <button onclick="changeLanguage('hi', this)" class="lang-option">
                 <span>🇮🇳</span> Hindi
-            </div>
-            <div class="lang-option" onclick="changeLanguage('ml', this)">
+            </button>
+            <button onclick="changeLanguage('ml', this)" class="lang-option">
                 <span>🇮🇳</span> Malayalam
-            </div>
-            <div class="lang-option" onclick="changeLanguage('ta', this)">
+            </button>
+            <button onclick="changeLanguage('ta', this)" class="lang-option">
                 <span>🇮🇳</span> Tamil
-            </div>
-             <div class="lang-option" onclick="changeLanguage('sw', this)">
+            </button>
+             <button onclick="changeLanguage('sw', this)" class="lang-option">
                 <span>🌍</span> Swahili
-            </div>
-            <div class="lang-option" onclick="changeLanguage('tl', this)">
+            </button>
+            <button onclick="changeLanguage('tl', this)" class="lang-option">
                 <span>🇵🇭</span> Tagalog
-            </div>
+            </button>
         </div>
     </div>
 
     <script>
         // --- TRANSLATION ENGINE ---
-        // ... (Translation object remains unchanged)
         const translations = {
             en: {
                 nav_home: "Home",
@@ -1475,23 +1483,160 @@
                 footer_privacy: "Sera ya Faragha",
                 footer_terms: "Masharti ya Huduma",
                 footer_rights: "Haki zote zimehifadhiwa."
+            },
+            tl: {
+                nav_home: "Home", nav_programs: "Mga Programa", nav_services: "Mga Serbisyo", nav_assessment: "Libreng Pagtatasa", nav_about: "Tungkol sa Amin", nav_book: "Mag-book Ngayon",
+                
+                hero_badge: "Premium Visa at Residency Strategy",
+                hero_subtitle: "Tumalon patungo sa Hinaharap",
+                search_placeholder_text: "Simulang mag-type para maghanap",
+                jobs_highlight: "Mga Trabaho",
+                or_text: "o",
+                visas_highlight: "mga Visa",
+                btn_assessment: "Simulan ang Pagtatasa",
+                btn_consultation: "Mag-book ng Konsultasyon",
+                
+                sec_dest_focus: "Pokus sa Destinasyon",
+                sec_dest_title: "Ang Aming Eksklusibong mga Programa sa Mobility",
+                
+                country_netherlands: "Netherlands",
+                tag_high_skilled: "High Skilled",
+                desc_netherlands: "Mga oportunidad na top-tier para sa mga propesyonal. Mahusay na benepisyo.",
+                
+                country_germany: "Germany",
+                tag_care_home: "Care Home",
+                desc_germany: "Pinakamalaking ekonomiya sa Europa. Mabilis na visa para sa mga skilled professionals.",
+                
+                country_sweden: "Sweden",
+                tag_airport: "Trabaho sa Paliparan",
+                desc_sweden: "Eksklusibong kontrata sa paliparan. Engineering at Hospitality roles.",
+
+                country_finland: "Finland",
+                tag_high_income: "Mataas na Kita",
+                desc_finland: "Ang pinakamasayang bansa sa mundo. Tech at Service roles.",
+
+                country_italy: "Italy",
+                tag_quota: "Quota Visas",
+                desc_italy: "Papasok na manggagawa (seasonal at non-seasonal) gamit ang Decreto Flussi.",
+
+                country_france: "France",
+                tag_talent: "Talent Passport",
+                desc_france: "Umaakit ng mga manggagawang may mataas na kasanayan at mga mamumuhunan.",
+
+                country_poland: "Poland",
+                tag_schengen: "Schengen Hub",
+                desc_poland: "Sentro ng Paggawa at Logistik na may matatag na daan.",
+
+                country_czech: "Czech Republic",
+                tag_industry: "Industriya",
+                desc_czech: "Puso ng Automotive at Engineering sa Gitnang Europa.",
+
+                country_macedonia: "Macedonia",
+                tag_emerging: "Umuusbong",
+                desc_macedonia: "Mabilis na umuunlad na merkado na may bagong oportunidad.",
+
+                country_latvia: "Latvia",
+                tag_baltic: "Trabaho sa Baltic",
+                desc_latvia: "Lumalaking pangangailangan sa logistik, konstruksyon, at serbisyo.",
+
+                country_serbia: "Serbia",
+                tag_construction: "Konstruksyon",
+                desc_serbia: "Mataas na pangangailangan para sa skilled trades at imprastraktura.",
+
+                country_albania: "Albania",
+                tag_hospitality: "Hospitality",
+                desc_albania: "Lumalagong turismo na nag-aalok ng seasonal at pangmatagalang trabaho.",
+
+                sec_expertise: "Ang Aming Ekspertise",
+                sec_service_suite: "Komprehensibong Serbisyo",
+                
+                serv_visa_appt: "Appointment sa Visa",
+                desc_visa_appt: "Mabilis na pagkuha ng VFS at embassy slots gamit ang aming 24/7 monitoring.",
+                btn_book_slot: "Mag-book ng Slot",
+
+                serv_visa_doc: "Dokumentasyon sa Visa",
+                desc_visa_doc: "Pagsusuri, paghahanda, at legalisasyon ng iyong mga dokumento.",
+                btn_review_docs: "Suriin ang Docs",
+
+                serv_travel: "Tulong sa Paglalakbay",
+                desc_travel: "Planong itinerary, flight, at hotel booking na sumusunod sa visa rules.",
+                btn_plan_trip: "Planuhin ang Biyahe",
+
+                serv_insurance: "Insurance",
+                desc_insurance: "Mandatory na Schengen travel insurance na may buong medical coverage.",
+                btn_get_covered: "Kumuha ng Cover",
+
+                serv_medical: "Tulong Medikal",
+                desc_medical: "Gabay sa mga medical exam at sertipikasyon para sa residency.",
+                btn_view_req: "Tingnan ang Requirements",
+
+                serv_corp: "Solusyon sa Corporate B2B",
+                desc_corp: "Partnership para sa negosyo, pinapadali ang relocation at visa ng empleyado.",
+                btn_partner: "Makipag-partner sa Amin",
+
+                sec_methodology: "Metodolohiya",
+                sec_journey: "Subok na 4-Hakbang na Paglalakbay",
+                step_1_title: "Pagtatasa",
+                step_1_desc: "Ebalwasyon ng iyong profile laban sa requirements ng bansa.",
+                step_2_title: "Dokumentasyon",
+                step_2_desc: "Koleksyon, pagsasalin, at legalisasyon ng mga dokumento.",
+                step_3_title: "Pagsusumite",
+                step_3_desc: "Pakikipag-ugnayan sa foreign ministries para sa mabilis na proseso.",
+                step_4_title: "Paninirahan",
+                step_4_desc: "Suporta pagdating, tulong sa pabahay, at oryentasyon.",
+
+                sec_integrity: "Integridad at Kahusayan",
+                sec_standard_start: "Pamantayan sa Global",
+                sec_standard_end: "Mobility",
+                sec_standard_desc: "Mataas na tsansa ng tagumpay sa pamamagitan ng legal compliance at suporta.",
+                stat_approval: "Rate ng Pag-apruba",
+                stat_support: "Dedikadong Suporta",
+
+                val_legal_title: "Ganap na Legal na Katiyakan",
+                val_legal_desc: "Bawat aplikasyon ay sinusuri ng mga lisensyadong eksperto sa batas ng EU.",
+                val_price_title: "Malinaw na Presyo",
+                val_price_desc: "Malinaw na gastos na walang nakatagong bayarin.",
+
+                footer_destinations: "Mga Destinasyon",
+                footer_services: "Mga Serbisyo",
+                footer_company: "Kumpanya",
+                footer_office: "Opisina",
+                footer_story: "Aming Kwento",
+                footer_privacy: "Patakaran sa Privacy",
+                footer_terms: "Mga Tuntunin ng Serbisyo",
+                footer_rights: "Nakalaan ang lahat ng karapatan."
             }
         };
 
-        function toggleLangMenu() {
-            const menu = document.getElementById('langMenu');
-            menu.classList.toggle('active');
+        // --- NEW LANGUAGE LOGIC (from albania.html) ---
+        let currentLang = 'en';
+
+        function toggleLanguageDropdown(event) {
+            const button = document.getElementById('lang-toggle-btn');
+            const isActive = button.classList.toggle('active');
+            event.stopPropagation();
+            if (!isActive) {
+                 document.removeEventListener('click', closeLanguageDropdown);
+            } else {
+                 // Slight delay to ensure click event doesn't immediately close the menu
+                 setTimeout(() => { 
+                    document.addEventListener('click', closeLanguageDropdown);
+                 }, 10);
+            }
         }
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            const fab = document.querySelector('.lang-fab');
-            if (!fab.contains(e.target)) {
-                document.getElementById('langMenu').classList.remove('active');
+        function closeLanguageDropdown(event) {
+            const dropdown = document.getElementById('language-dropdown');
+            const button = document.getElementById('lang-toggle-btn');
+            // Check if click was outside the button and the dropdown
+            if (dropdown && button && !dropdown.contains(event.target) && !button.contains(event.target)) {
+                button.classList.remove('active');
+                document.removeEventListener('click', closeLanguageDropdown);
             }
-        });
+        }
 
         function changeLanguage(lang, element) {
+            currentLang = lang;
             // Update UI Selection
             document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('active'));
             if(element) element.classList.add('active');
@@ -1500,12 +1645,7 @@
             const dict = translations[lang];
             if (!dict) return;
 
-            // 1. Update Navigation (injected via JS, so we target IDs or create selectors)
-            // Since nav is injected, we need to handle it dynamically or update the stored HTML variable.
-            // For simplicity in this structure, we will target elements by content if they don't have IDs, 
-            // OR better, we simply re-inject the header with new strings if we had a render function.
-            // BUT, since we added data-i18n, we can just querySelect all.
-            
+            // Update elements with data-i18n attributes
             const i18nElements = document.querySelectorAll('[data-i18n]');
             
             i18nElements.forEach(el => {
@@ -1518,7 +1658,7 @@
                         // For fade effect
                         el.style.opacity = '0';
                         setTimeout(() => {
-                            el.innerText = dict[key];
+                            el.innerHTML = dict[key]; // Use innerHTML to allow for <br> tags in subtitle
                             el.style.opacity = '1';
                         }, 200);
                     }
@@ -1535,8 +1675,10 @@
             }
 
             // Close menu
-            document.getElementById('langMenu').classList.remove('active');
+            document.getElementById('lang-toggle-btn').classList.remove('active');
+            document.removeEventListener('click', closeLanguageDropdown);
         }
+        // --- END NEW LANGUAGE LOGIC ---
 
 
         // --- LENIS SMOOTH SCROLL INITIALIZATION (Defined BEFORE usage) ---
@@ -1664,7 +1806,7 @@
                     <a href="book.html" onclick="toggleMobileMenu()" data-i18n="btn_consultation" class="w-full max-w-xs text-center text-xl font-bold text-deep-space bg-brand-gold px-8 py-5 rounded-full shadow-xl hover:scale-105 transition-transform">Book Consultation</a>
                 </div>
             </div>
-        </nav>
+        </div>
         <div id="search-overlay" class="fixed inset-0 z-[100] bg-deep-space/80 backdrop-blur-xl flex items-start justify-center pt-24 px-4">
             <div class="absolute inset-0 cursor-default" onclick="toggleSearch()"></div>
             <div id="search-container" class="w-full max-w-3xl relative z-10 bg-[#0F172A]/90 border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[70vh]">

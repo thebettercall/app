@@ -8,10 +8,10 @@
     
     <link rel="canonical" href="/serbia.html"/>
     
-    <!-- Fonts: Outfit (Sans Serif) Only - Matching Index -->
+    <!-- Fonts: Outfit (Main) + Noto Sans (Multi-language Support) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -29,8 +29,9 @@
                 theme: {
                     extend: {
                         fontFamily: {
-                            sans: ['Outfit', 'sans-serif'],
-                            serif: ['Outfit', 'sans-serif'], 
+                            // Added Noto Sans fallback for non-Latin scripts
+                            sans: ['Outfit', 'Noto Sans', 'sans-serif'],
+                            serif: ['Outfit', 'Noto Sans', 'sans-serif'], 
                         },
                         colors: {
                             // Global Theme Colors
@@ -80,7 +81,7 @@
             background-color: #050B14;
             color: #E2E8F0;
             overflow-x: hidden;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Outfit', 'Noto Sans', sans-serif;
         }
 
         /* --- LENIS SMOOTH SCROLL CSS --- */
@@ -1189,6 +1190,9 @@
             // Re-render dynamic content
             renderJobs(jobsData);
             renderTimeline();
+            
+            // FIX: Re-check scroll animations for new elements
+            setTimeout(checkScroll, 50);
 
             // Close dropdown
             document.getElementById('lang-toggle-btn').classList.remove('active');

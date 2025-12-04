@@ -223,7 +223,7 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px; 
-            padding: 24px; /* Slightly increased padding */
+            padding: 32px; /* INCREASED from 24px for Mobile Visibility */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -232,6 +232,13 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            min-height: 140px; /* ADDED min-height for substantial touch target on mobile */
+        }
+        @media (min-width: 768px) {
+            .compact-card {
+                padding: 24px;
+                min-height: auto;
+            }
         }
         .compact-card:hover {
             background: rgba(255, 255, 255, 0.08);
@@ -281,15 +288,12 @@
             </div>
         </header>
 
-        <!-- Search Section (Modified: Removed Input Search Option) -->
+        <!-- Search Section -->
         <div id="search-section" class="sticky top-20 z-40 transition-all duration-300 pt-4 pb-2" id="jobs">
             <div class="container mx-auto px-4">
                 <div class="glass-panel rounded-2xl p-4 border border-white/10 shadow-2xl">
                     <div class="flex flex-col md:flex-row gap-4 max-w-6xl mx-auto items-center justify-center">
                         
-                        <!-- REMOVED SEARCH INPUT as per requirement -->
-                        <!-- Kept Category Filter only for easier navigation without search text -->
-
                         <div class="w-full relative">
                             <i class="fa-solid fa-filter absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                             <select id="deptSelect" onchange="filterJobs()" class="w-full pl-12 pr-10 py-3 glass-input rounded-xl focus:ring-2 focus:ring-czech-teal outline-none appearance-none cursor-pointer font-medium text-gray-300">
@@ -299,6 +303,7 @@
                                 <option value="Technical" class="bg-[#0F172A]" data-i18n="opt_tech">Technical</option>
                                 <option value="Unskilled" class="bg-[#0F172A]" data-i18n="opt_unskilled">Unskilled</option>
                                 <option value="Logistics" class="bg-[#0F172A]" data-i18n="opt_logistics">Logistics</option>
+                                <option value="Construction" class="bg-[#0F172A]" data-i18n="opt_construction">Construction</option>
                             </select>
                             <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
                         </div>
@@ -578,6 +583,7 @@
                 opt_tech: "Technical",
                 opt_unskilled: "Unskilled",
                 opt_logistics: "Logistics",
+                opt_construction: "Construction",
                 process_kicker: "Transparency First",
                 process_title: "Application Process",
                 process_subtitle: "A structured path to your new career in the Czech Republic.",
@@ -607,7 +613,23 @@
                 step_05: "Visa Filing",
                 step_05_d: "Embassy appointment and final visa submission.",
                 step_06: "Departure",
-                step_06_d: "Final preparation for travel and employment."
+                step_06_d: "Final preparation for travel and employment.",
+                // Job Titles
+                job_production: "Production Line Worker",
+                job_warehouse: "Warehouse Staff",
+                job_construction_helper: "Construction Helper",
+                job_welder: "Welder (Certified)",
+                job_cnc: "CNC Operator",
+                job_auto_elec: "Auto Electrician",
+                job_auto_tech: "Automotive Technician",
+                job_hgv: "Heavy Goods Driver (C+E)",
+                job_software: "Software Developer",
+                // Experience
+                exp_entry: "Entry Level",
+                exp_1: "1 Year",
+                exp_2: "2 Years",
+                exp_3: "3 Years",
+                exp_5: "5 Years"
             },
             ml: {
                 hero_badge: "സെൻട്രൽ യൂറോപ്പിലെ വ്യവസായ കേന്ദ്രം",
@@ -622,6 +644,7 @@
                 opt_tech: "ടെക്നിക്കൽ",
                 opt_unskilled: "അൺസ്കിൽഡ്",
                 opt_logistics: "ലോജിസ്റ്റിക്സ്",
+                opt_construction: "നിർമ്മാണ മേഖല",
                 process_kicker: "സുതാര്യത ആദ്യം",
                 process_title: "അപേക്ഷാ നടപടികൾ",
                 process_subtitle: "ചെക്ക് റിപ്പബ്ലിക്കിലെ നിങ്ങളുടെ പുതിയ കരിയറിലേക്കുള്ള ഘട്ടം ഘട്ടമായുള്ള വഴി.",
@@ -651,7 +674,23 @@
                 step_05: "വിസ ഫയലിംഗ്",
                 step_05_d: "എംബസി അപ്പോയിന്റ്മെന്റും വിസ സമർപ്പണവും.",
                 step_06: "യാത്ര",
-                step_06_d: "യാത്രയ്ക്കുള്ള അന്തിമ തയ്യാറെടുപ്പുകൾ."
+                step_06_d: "യാത്രയ്ക്കുള്ള അന്തിമ തയ്യാറെടുപ്പുകൾ.",
+                // Job Titles
+                job_production: "പ്രൊഡക്ഷൻ ലൈൻ വർക്കർ",
+                job_warehouse: "വെയർഹൗസ് സ്റ്റാഫ്",
+                job_construction_helper: "നിർമ്മാണ സഹായകൻ",
+                job_welder: "വെൽഡർ (സർട്ടിഫൈഡ്)",
+                job_cnc: "CNC ഓപ്പറേറ്റർ",
+                job_auto_elec: "ഓട്ടോ ഇലക്ട്രീഷ്യൻ",
+                job_auto_tech: "ഓട്ടോമോട്ടീവ് ടെക്നീഷ്യൻ",
+                job_hgv: "ഹെവി ഗുഡ്സ് ഡ്രൈവർ",
+                job_software: "സോഫ്റ്റ്‌വെയർ ഡെവലപ്പർ",
+                // Experience
+                exp_entry: "മുൻപരിചയം ആവശ്യമില്ല",
+                exp_1: "1 വർഷം",
+                exp_2: "2 വർഷം",
+                exp_3: "3 വർഷം",
+                exp_5: "5 വർഷം"
             },
             hi: {
                 hero_badge: "मध्य यूरोप का औद्योगिक केंद्र",
@@ -666,6 +705,7 @@
                 opt_tech: "तकनीकी",
                 opt_unskilled: "अकुशल",
                 opt_logistics: "लॉजिस्टिक्स",
+                opt_construction: "निर्माण",
                 process_kicker: "पारदर्शिता पहले",
                 process_title: "आवेदन प्रक्रिया",
                 process_subtitle: "चेक गणराज्य में आपके नए करियर के लिए एक संरचित मार्ग।",
@@ -695,7 +735,23 @@
                 step_05: "वीजा फाइलिंग",
                 step_05_d: "दूतावास नियुक्ति और वीजा जमा।",
                 step_06: "प्रस्थान",
-                step_06_d: "यात्रा और रोजगार शुरू करने की तैयारी।"
+                step_06_d: "यात्रा और रोजगार शुरू करने की तैयारी।",
+                // Job Titles
+                job_production: "उत्पादन लाइन कार्यकर्ता",
+                job_warehouse: "गोदाम कर्मचारी",
+                job_construction_helper: "निर्माण सहायक",
+                job_welder: "वेल्डर (प्रमाणित)",
+                job_cnc: "सीएनसी ऑपरेटर",
+                job_auto_elec: "ऑटो इलेक्ट्रीशियन",
+                job_auto_tech: "ऑटोमोटिव तकनीशियन",
+                job_hgv: "भारी वाहन चालक",
+                job_software: "सॉफ्टवेयर डेवलपर",
+                // Experience
+                exp_entry: "प्रवेश स्तर",
+                exp_1: "1 वर्ष",
+                exp_2: "2 वर्ष",
+                exp_3: "3 वर्ष",
+                exp_5: "5 वर्ष"
             },
             ta: {
                 hero_badge: "மத்திய ஐரோப்பாவின் தொழில்துறை மையம்",
@@ -710,6 +766,7 @@
                 opt_tech: "தொழில்நுட்பம்",
                 opt_unskilled: "திறனற்றவை",
                 opt_logistics: "தளவாடங்கள்",
+                opt_construction: "கட்டுமானம்",
                 process_kicker: "வெளிப்படைத்தன்மை",
                 process_title: "விண்ணப்ப செயல்முறை",
                 process_subtitle: "செக் குடியரசில் உங்கள் புதிய வேலைக்கான பாதை.",
@@ -739,7 +796,23 @@
                 step_05: "விசா தாக்கல்",
                 step_05_d: "தூதரக நியமனம் மற்றும் விசா சமர்ப்பிப்பு.",
                 step_06: "பயணம்",
-                step_06_d: "பயணத்திற்கான ஏற்பாடுகள்."
+                step_06_d: "பயணத்திற்கான ஏற்பாடுகள்.",
+                // Job Titles
+                job_production: "உற்பத்தி வரி பணியாளர்",
+                job_warehouse: "கிடங்கு பணியாளர்கள்",
+                job_construction_helper: "கட்டுமான உதவியாளர்",
+                job_welder: "வெல்டர் (சான்றளிக்கப்பட்டவர்)",
+                job_cnc: "CNC ஆபரேட்டர்",
+                job_auto_elec: "ஆட்டோ எலக்ட்ரீஷியன்",
+                job_auto_tech: "வாகன தொழில்நுட்ப வல்லுநர்",
+                job_hgv: "கனரக சரக்கு ஓட்டுநர்",
+                job_software: "மென்பொருள் உருவாக்குநர்",
+                // Experience
+                exp_entry: "நுழைவு நிலை",
+                exp_1: "1 வருடம்",
+                exp_2: "2 ஆண்டுகள்",
+                exp_3: "3 ஆண்டுகள்",
+                exp_5: "5 ஆண்டுகள்"
             },
             fil: {
                 hero_badge: "Sentro ng Industriya sa Central Europe",
@@ -754,6 +827,7 @@
                 opt_tech: "Technical",
                 opt_unskilled: "Unskilled",
                 opt_logistics: "Logistics",
+                opt_construction: "Konstruksyon",
                 process_kicker: "Transparency Una",
                 process_title: "Proseso ng Aplikasyon",
                 process_subtitle: "Isang organisadong daan patungo sa iyong bagong karera sa Czech Republic.",
@@ -783,7 +857,23 @@
                 step_05: "Pag-file ng Visa",
                 step_05_d: "Appointment sa Embahada.",
                 step_06: "Pag-alis",
-                step_06_d: "Paghahanda para sa paglalakbay."
+                step_06_d: "Paghahanda para sa paglalakbay.",
+                // Job Titles
+                job_production: "Production Line Worker",
+                job_warehouse: "Kawanihan ng Bodega",
+                job_construction_helper: "Katulong sa Konstruksyon",
+                job_welder: "Welder (Sertipikado)",
+                job_cnc: "CNC Operator",
+                job_auto_elec: "Auto Electrician",
+                job_auto_tech: "Automotive Technician",
+                job_hgv: "Heavy Goods Driver",
+                job_software: "Software Developer",
+                // Experience
+                exp_entry: "Entry Level",
+                exp_1: "1 Taon",
+                exp_2: "2 Taon",
+                exp_3: "3 Taon",
+                exp_5: "5 Taon"
             },
             si: {
                 hero_badge: "මධ්‍යම යුරෝපයේ කාර්මික මධ්‍යස්ථානය",
@@ -798,6 +888,7 @@
                 opt_tech: "තාක්ෂණික",
                 opt_unskilled: "නුපුහුණු",
                 opt_logistics: "ප්‍රවාහන",
+                opt_construction: "ඉදිකිරීම්",
                 process_kicker: "විනිවිදභාවය පළමුව",
                 process_title: "අයදුම් කිරීමේ ක්‍රියාවලිය",
                 process_subtitle: "චෙක් ජනරජයේ ඔබේ නව වෘත්තියට මාර්ගයක්.",
@@ -827,7 +918,23 @@
                 step_05: "වීසා ගොනු කිරීම",
                 step_05_d: "තානාපති කාර්යාල හමුවීම.",
                 step_06: "පිටත්ව යාම",
-                step_06_d: "සංචාරය සඳහා සූදානම් වීම."
+                step_06_d: "සංචාරය සඳහා සූදානම් වීම.",
+                // Job Titles
+                job_production: "නිෂ්පාදන අංශයේ සේවක",
+                job_warehouse: "ගබඩා සේවක",
+                job_construction_helper: "ඉදිකිරීම් සහායක",
+                job_welder: "වෙල්ඩර් (සහතික ලත්)",
+                job_cnc: "CNC ක්‍රියාකරු",
+                job_auto_elec: "වාහන විදුලි කාර්මික",
+                job_auto_tech: "වාහන කාර්මික ශිල්පී",
+                job_hgv: "බර වාහන රියදුරු",
+                job_software: "මෘදුකාංග ඉංජිනේරු",
+                // Experience
+                exp_entry: "ආධුනික",
+                exp_1: "වසර 1",
+                exp_2: "වසර 2",
+                exp_3: "වසර 3",
+                exp_5: "වසර 5"
             },
             sw: {
                 hero_badge: "Kitovu cha Viwanda cha Ulaya ya Kati",
@@ -842,6 +949,7 @@
                 opt_tech: "Kiufundi",
                 opt_unskilled: "Isiyo na Ujuzi",
                 opt_logistics: "Usafirishaji",
+                opt_construction: "Ujenzi",
                 process_kicker: "Uwazi Kwanza",
                 process_title: "Mchakato wa Maombi",
                 process_subtitle: "Njia iliyopangwa kwa kazi yako mpya katika Jamhuri ya Czech.",
@@ -871,7 +979,23 @@
                 step_05: "Kufungua Visa",
                 step_05_d: "Uteuzi wa Ubalozi.",
                 step_06: "Kuondoka",
-                step_06_d: "Maandalizi ya mwisho ya kusafiri."
+                step_06_d: "Maandalizi ya mwisho ya kusafiri.",
+                // Job Titles
+                job_production: "Mfanyakazi wa Uzalishaji",
+                job_warehouse: "Mfanyakazi wa Ghala",
+                job_construction_helper: "Msaidizi wa Ujenzi",
+                job_welder: "Mchomeleaji (Aliyethibitishwa)",
+                job_cnc: "Opereta wa CNC",
+                job_auto_elec: "Fundi Umeme wa Magari",
+                job_auto_tech: "Fundi wa Magari",
+                job_hgv: "Dereva wa Magari Mazito",
+                job_software: "Msanidi Programu",
+                // Experience
+                exp_entry: "Ngazi ya Kuingia",
+                exp_1: "Mwaka 1",
+                exp_2: "Miaka 2",
+                exp_3: "Miaka 3",
+                exp_5: "Miaka 5"
             }
         };
 
@@ -1263,23 +1387,22 @@
             });
             
             renderMobileCategories();
+            filterJobs(); // Re-render jobs to apply translations
             renderTimeline();
             
-            // Note: Job Content itself isn't fully translated here for brevity, 
-            // but category names and UI elements are.
             document.getElementById('lang-toggle-btn').classList.remove('active');
         }
 
         const jobsData = [
-            { title: "Production Line Worker", dept: "Unskilled", euro: "€900 – €1,300", exp: "Entry Level", icon: "fa-solid fa-industry" },
-            { title: "Warehouse Staff", dept: "Logistics", euro: "€1,000 – €1,400", exp: "1 Year", icon: "fa-solid fa-boxes-packing" },
-            { title: "Construction Helper", dept: "Construction", euro: "€950 – €1,300", exp: "Entry Level", icon: "fa-solid fa-trowel" },
-            { title: "Welder (Certified)", dept: "Skilled Trade", euro: "€1,400 – €2,300+", exp: "3 Years", icon: "fa-solid fa-fire-burner" },
-            { title: "CNC Operator", dept: "Technical", euro: "€1,500 – €2,400+", exp: "2 Years", icon: "fa-solid fa-gears" },
-            { title: "Auto Electrician", dept: "Automotive", euro: "€1,400 – €2,200", exp: "3 Years", icon: "fa-solid fa-bolt" },
-            { title: "Automotive Technician", dept: "Automotive", euro: "€1,500 – €2,500", exp: "3 Years", icon: "fa-solid fa-car-battery" },
-            { title: "Heavy Goods Driver (C+E)", dept: "Logistics", euro: "€1,800 – €2,800+", exp: "3 Years", icon: "fa-solid fa-truck" },
-            { title: "Software Developer", dept: "Technical", euro: "€2,500 – €5,000+", exp: "5 Years", icon: "fa-solid fa-code" }
+            { key: "job_production", title: "Production Line Worker", dept: "Unskilled", deptKey: "opt_unskilled", euro: "€900 – €1,300", exp: "Entry Level", expKey: "exp_entry", icon: "fa-solid fa-industry" },
+            { key: "job_warehouse", title: "Warehouse Staff", dept: "Logistics", deptKey: "opt_logistics", euro: "€1,000 – €1,400", exp: "1 Year", expKey: "exp_1", icon: "fa-solid fa-boxes-packing" },
+            { key: "job_construction_helper", title: "Construction Helper", dept: "Construction", deptKey: "opt_construction", euro: "€950 – €1,300", exp: "Entry Level", expKey: "exp_entry", icon: "fa-solid fa-trowel" },
+            { key: "job_welder", title: "Welder (Certified)", dept: "Skilled Trade", deptKey: "opt_trade", euro: "€1,400 – €2,300+", exp: "3 Years", expKey: "exp_3", icon: "fa-solid fa-fire-burner" },
+            { key: "job_cnc", title: "CNC Operator", dept: "Technical", deptKey: "opt_tech", euro: "€1,500 – €2,400+", exp: "2 Years", expKey: "exp_2", icon: "fa-solid fa-gears" },
+            { key: "job_auto_elec", title: "Auto Electrician", dept: "Automotive", deptKey: "opt_auto", euro: "€1,400 – €2,200", exp: "3 Years", expKey: "exp_3", icon: "fa-solid fa-bolt" },
+            { key: "job_auto_tech", title: "Automotive Technician", dept: "Automotive", deptKey: "opt_auto", euro: "€1,500 – €2,500", exp: "3 Years", expKey: "exp_3", icon: "fa-solid fa-car-battery" },
+            { key: "job_hgv", title: "Heavy Goods Driver (C+E)", dept: "Logistics", deptKey: "opt_logistics", euro: "€1,800 – €2,800+", exp: "3 Years", expKey: "exp_3", icon: "fa-solid fa-truck" },
+            { key: "job_software", title: "Software Developer", dept: "Technical", deptKey: "opt_tech", euro: "€2,500 – €5,000+", exp: "5 Years", expKey: "exp_5", icon: "fa-solid fa-code" }
         ];
 
         const timelineData = [
@@ -1297,10 +1420,10 @@
         const mobileCatContainer = document.getElementById('mobileCategories');
 
         function renderMobileCategories() {
-            const categories = ["All", "Automotive", "Skilled Trade", "Technical", "Unskilled", "Logistics"];
+            const categories = ["All", "Automotive", "Skilled Trade", "Technical", "Unskilled", "Logistics", "Construction"];
             const catMap = {
                 "All": "opt_all", "Automotive": "opt_auto", "Skilled Trade": "opt_trade",
-                "Technical": "opt_tech", "Unskilled": "opt_unskilled", "Logistics": "opt_logistics"
+                "Technical": "opt_tech", "Unskilled": "opt_unskilled", "Logistics": "opt_logistics", "Construction": "opt_construction"
             };
             const t = translations[currentLang] || translations['en'];
 
@@ -1321,6 +1444,7 @@
 
         function renderJobs(data) {
             container.innerHTML = "";
+            const t = translations[currentLang] || translations['en'];
 
             if (data.length === 0) {
                 container.innerHTML = `
@@ -1336,6 +1460,9 @@
 
             data.forEach((job, index) => {
                 const globalIndex = jobsData.indexOf(job);
+                const title = t[job.key] || job.title;
+                const exp = t[job.expKey] || job.exp;
+
                 const card = `
                     <div onclick="openJobModal(${globalIndex})" class="compact-card group reveal-item" style="transition-delay: ${index * 50}ms">
                          <div class="absolute top-0 right-0 w-24 h-24 bg-czech-teal/5 rounded-full blur-[30px] group-hover:bg-czech-teal/10 transition-all"></div>
@@ -1344,11 +1471,11 @@
                                 <i class="${job.icon} text-2xl"></i>
                             </div>
                             <div class="flex-grow min-w-0">
-                                <h4 class="text-xl md:text-2xl font-bold text-white group-hover:text-czech-teal transition-colors truncate">${job.title}</h4>
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-sm md:text-base text-gray-500 mt-1">
-                                    <span class="bg-white/5 px-2 py-0.5 rounded text-gray-300 font-bold border border-white/5">${job.euro}</span>
-                                    <span class="hidden sm:inline">•</span>
-                                    <span>${job.exp}</span>
+                                <h4 class="text-2xl md:text-3xl font-bold text-white group-hover:text-czech-teal transition-colors truncate">${title}</h4>
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-lg md:text-xl text-gray-500 mt-1 font-semibold">
+                                    <span class="bg-white/5 px-2 py-0.5 rounded text-gray-300 font-bold border border-white/5 text-base md:text-lg">${job.euro}</span>
+                                    <span class="hidden sm:inline opacity-50">•</span>
+                                    <span class="text-base md:text-lg text-czech-lime">${exp}</span>
                                 </div>
                             </div>
                         </div>
@@ -1387,7 +1514,6 @@
 
         function filterJobs() {
             const dept = document.getElementById('deptSelect').value;
-            // Removed Search Text Logic
             const filtered = jobsData.filter(job => {
                 const matchesDept = dept === "All" || job.dept.toLowerCase().includes(dept.toLowerCase());
                 return matchesDept;
@@ -1446,10 +1572,12 @@
             const job = jobsData[index];
             if(!job) return;
 
-            document.getElementById('modalTitle').innerText = job.title;
-            document.getElementById('modalDept').innerText = job.dept;
+            const t = translations[currentLang] || translations['en'];
+
+            document.getElementById('modalTitle').innerText = t[job.key] || job.title;
+            document.getElementById('modalDept').innerText = t[job.deptKey] || job.dept;
             document.getElementById('modalEuro').innerText = job.euro;
-            document.getElementById('modalExp').innerText = job.exp;
+            document.getElementById('modalExp').innerText = t[job.expKey] || job.exp;
 
             const iconContainer = document.getElementById('modalIcon');
             iconContainer.innerHTML = `<i class="${job.icon}"></i>`;
