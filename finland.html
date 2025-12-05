@@ -200,6 +200,11 @@
             background: #0F172A;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        
+        /* Search Animation */
+        .search-glow:focus-within {
+            box-shadow: 0 0 30px rgba(0, 163, 255, 0.3);
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative" id="page-body">
@@ -252,9 +257,36 @@
                 <div class="max-w-7xl mx-auto mb-6">
                     <h3 class="text-xl md:text-2xl font-bold text-white mb-4 text-center" data-i18n="select_department">Select Job Department</h3>
                 </div>
-                <!-- Grid of Category Buttons -->
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 max-w-7xl mx-auto" id="categoryButtons">
+                <!-- Grid of Category Buttons (Horizontal Scroll on Mobile, Grid on Desktop) -->
+                <div class="flex overflow-x-auto md:grid md:grid-cols-5 gap-3 max-w-7xl mx-auto pb-4 md:pb-0 hide-scrollbar snap-x px-1" id="categoryButtons">
                     <!-- Buttons injected by JS -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEW CREATIVE JOB SEARCH SECTION -->
+        <div class="py-6 relative z-30">
+            <div class="container mx-auto px-4">
+                <div class="max-w-2xl mx-auto relative group">
+                    <!-- Glow Effect Background -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-finland-blue via-finland-sky to-finland-blue rounded-full blur opacity-20 group-hover:opacity-40 transition duration-700"></div>
+                    
+                    <!-- Search Bar -->
+                    <div class="relative glass-panel rounded-full flex items-center px-6 py-4 shadow-2xl border border-white/10 search-glow transition-all duration-300 bg-[#0B132B]/60 backdrop-blur-xl">
+                        <i class="fa-solid fa-magnifying-glass text-finland-sky text-xl mr-4 group-focus-within:scale-110 transition-transform"></i>
+                        <input type="text" id="jobSearchInput" placeholder="Search for positions (e.g. Welder, Driver, Chef)..." 
+                            class="bg-transparent border-none outline-none text-white w-full text-lg placeholder-gray-500 font-medium focus:ring-0"
+                            autocomplete="off"
+                            onkeyup="handleSearch(this.value)">
+                        
+                        <!-- Pulse Indicator -->
+                        <div class="hidden group-focus-within:block absolute right-6">
+                             <span class="relative flex h-3 w-3">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-finland-sky opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-3 w-3 bg-finland-sky"></span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-center mt-6"><p id="jobCount" class="text-sm font-bold text-finland-sky uppercase tracking-wide">Loading...</p></div>
             </div>
@@ -304,6 +336,17 @@
                 <button onclick="setLanguage('sw');" class="px-3 py-2 rounded-lg text-sm text-white hover:text-finland-sky hover:bg-white/10 transition block text-left">Swahili (SW)</button>
             </div>
         </div>
+    </div>
+
+    <!-- Floating Apply Button (Center) -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs px-4 sm:px-0 flex justify-center pointer-events-none">
+        <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-538/U84ZR39A6C9IQX7M1M" target="_blank" class="pointer-events-auto relative group bg-gradient-to-r from-finland-blue to-finland-sky text-white font-bold py-4 px-8 rounded-full shadow-[0_0_30px_rgba(0,53,128,0.5)] hover:shadow-[0_0_50px_rgba(0,53,128,0.8)] transition-all duration-300 hover:-translate-y-1 hover:scale-105 overflow-hidden flex items-center gap-3 border border-white/20">
+            <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            <span class="relative z-10 text-lg tracking-widest uppercase" data-i18n="modal_apply">Apply Now</span>
+            <i class="fa-solid fa-paper-plane relative z-10 group-hover:translate-x-1 transition-transform"></i>
+            <!-- Pulse ring -->
+            <span class="absolute inset-0 rounded-full border-2 border-white/30 animate-ping opacity-20"></span>
+        </a>
     </div>
 
     <!-- Floating WhatsApp Button (Right Side) -->
@@ -362,7 +405,7 @@
                     </div>
 
                     <div class="bg-black/30 px-8 py-6 flex flex-col sm:flex-row gap-4 border-t border-white/10">
-                         <a href="https://bettercall.setmore.com/services/3c94ab67-f606-42ce-9a93-7e86c2efaef6" target="_blank" class="w-full text-center bg-finland-blue hover:bg-[#002860] text-white font-bold text-lg py-4 rounded-xl transition shadow-lg shadow-finland-blue/20" data-i18n="modal_apply">Apply Now</a>
+                         <a href="https://forms.clickup.com/90182075750/f/2kzmahb6-538/U84ZR39A6C9IQX7M1M" target="_blank" class="w-full text-center bg-finland-blue hover:bg-[#002860] text-white font-bold text-lg py-4 rounded-xl transition shadow-lg shadow-finland-blue/20" data-i18n="modal_apply">Apply Now</a>
                     </div>
                 </div>
             </div>
@@ -982,6 +1025,7 @@
 
         let currentCategory = 'All';
         let currentLang = 'en';
+        let currentSearchTerm = ''; // NEW: Track Search Term
         let languageDropdownOpen = false;
 
         // --- RENDER FUNCTIONS ---
@@ -991,10 +1035,24 @@
             
             container.innerHTML = "";
 
-            // 1. Determine which jobs to display based on category filter
-            let filteredData = (currentCategory === 'All') ? data : data.filter(job => job.dept === currentCategory);
+            // 1. Start with All Data
+            let filteredData = data;
             
-            // 2. Group all *filtered* data by Department
+            // 2. Filter by Category
+            if (currentCategory !== 'All') {
+                filteredData = filteredData.filter(job => job.dept === currentCategory);
+            }
+            
+            // 3. Filter by Search Term (NEW)
+            if (currentSearchTerm.trim() !== '') {
+                const term = currentSearchTerm.toLowerCase();
+                filteredData = filteredData.filter(job => 
+                    job.title.toLowerCase().includes(term) || 
+                    job.dept.toLowerCase().includes(term)
+                );
+            }
+            
+            // 4. Group all *filtered* data by Department
             const grouped = filteredData.reduce((acc, job) => {
                 acc[job.dept] = acc[job.dept] || [];
                 acc[job.dept].push(job);
@@ -1004,17 +1062,29 @@
             let totalShown = 0;
 
             if (Object.keys(grouped).length === 0) {
-                 container.innerHTML = `<div class="text-center py-20 text-gray-500">No jobs found in this category.</div>`;
-                 countLabel.innerText = "0 positions";
+                 // Enhanced No Results Message
+                 container.innerHTML = `
+                    <div class="text-center py-20 animate-fade-in-up">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-magnifying-glass text-4xl text-white/20"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">No positions found</h3>
+                        <p class="text-gray-400">Try adjusting your search or category filter.</p>
+                        <button onclick="clearFilters()" class="mt-6 text-finland-sky font-bold hover:underline">Clear all filters</button>
+                    </div>`;
+                 countLabel.innerText = "0 positions found";
                  return;
             }
 
-            // 3. Iterate and Render Sections with Show More Logic
+            // 5. Iterate and Render Sections with Show More Logic
             for (const [dept, jobs] of Object.entries(grouped)) {
                 // Determine limits for "show more"
                 const limit = 4; // Display only 4 jobs by default for grouping/pagination
-                const visibleJobs = jobs.slice(0, limit);
-                const hiddenJobs = jobs.slice(limit);
+                // If searching, show all matches to avoid hiding relevant results
+                const showAll = currentSearchTerm.trim() !== ''; 
+                
+                const visibleJobs = showAll ? jobs : jobs.slice(0, limit);
+                const hiddenJobs = showAll ? [] : jobs.slice(limit);
                 const hasMore = hiddenJobs.length > 0;
 
                 // Section Wrapper
@@ -1024,35 +1094,31 @@
                 // Header (Larger Font)
                 const header = `<h3 class="text-2xl md:text-3xl font-bold text-white mb-8 pl-4 border-l-8 border-finland-blue flex flex-col md:flex-row md:items-baseline gap-2">${dept} <span class="text-base font-normal text-gray-400">(${jobs.length} Positions)</span></h3>`;
                 
-                // Grid for visible jobs
-                let gridHTML = `<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">`; // Desktop grid-cols-3
+                let gridHTML = `<div class="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">`; // Desktop grid-cols-3
                 
-                // Mobile Font Improvements in this block: text-xl for title, text-base for details
-                visibleJobs.forEach((job, jobIndex) => {
+                // Job Cards
+                const renderCard = (job) => {
                     const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
-                    
-                    gridHTML += `
-                        <div onclick="openJobModal(${globalIndex})" class="glass-panel p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full">
+                    return `
+                        <div onclick="openJobModal(${globalIndex})" class="glass-panel p-3 sm:p-5 rounded-2xl flex flex-col items-start justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full">
                             <div class="absolute inset-0 bg-gradient-to-r from-finland-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="flex items-start gap-4 relative z-10 w-full">
-                                <!-- Larger Icon Box (Job Placeholder/Icon) -->
-                                <div class="w-14 h-14 rounded-xl bg-finland-blue/10 flex items-center justify-center text-finland-blue border border-finland-blue/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30">
-                                    <i class="${job.icon} text-2xl"></i>
+                            <div class="flex items-start gap-2 sm:gap-4 relative z-10 w-full">
+                                <div class="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-finland-blue/10 flex items-center justify-center text-finland-blue border border-finland-blue/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30">
+                                    <i class="${job.icon} text-xl sm:text-2xl"></i>
                                 </div>
                                 <div class="flex-grow min-w-0">
-                                    <!-- Card Content - Enlarged for Mobile -->
-                                    <h4 class="text-xl md:text-lg font-bold text-white group-hover:text-finland-sky transition-colors mb-1 leading-tight">${job.title}</h4>
-                                    <!-- Experience/Details placeholder -->
-                                    <span class="text-gray-300 md:text-gray-400 text-base md:text-sm font-medium">${job.exp}</span>
+                                    <h4 class="text-sm sm:text-xl md:text-lg font-bold text-white group-hover:text-finland-sky transition-colors mb-1 leading-tight">${job.title}</h4>
+                                    <span class="text-gray-300 md:text-gray-400 text-xs sm:text-base font-medium">${job.exp}</span>
                                 </div>
                             </div>
-                            <!-- Price Holder - Enlarged for Mobile -->
-                            <div class="mt-3 md:mt-0 md:ml-4 relative z-10 w-full md:w-auto text-right">
-                                <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-3 py-1 rounded-lg text-lg md:text-base tracking-wide whitespace-nowrap">${job.euro}</span>
+                            <div class="mt-2 relative z-10 w-full text-left">
+                                <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-2 py-0.5 rounded-lg text-sm sm:text-lg md:text-base tracking-wide whitespace-nowrap">${job.euro}</span>
                             </div>
                         </div>
                     `;
-                });
+                };
+
+                visibleJobs.forEach(job => gridHTML += renderCard(job));
                 gridHTML += `</div>`;
 
                 // "Show More" Logic
@@ -1060,32 +1126,8 @@
                 if (hasMore) {
                     const hiddenID = `more-${dept.replace(/\s+/g, '-').toLowerCase()}`;
                     
-                    // Hidden grid container (default hidden)
-                    let hiddenGrid = `<div id="${hiddenID}" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden transition-all duration-500">`;
-                    hiddenJobs.forEach((job) => {
-                        const globalIndex = jobsData.findIndex(j => j.title === job.title && j.dept === job.dept);
-                        hiddenGrid += `
-                             <div onclick="openJobModal(${globalIndex})" class="glass-panel p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between cursor-pointer group hover:bg-white/5 transition-all relative overflow-hidden h-full">
-                                <div class="absolute inset-0 bg-gradient-to-r from-finland-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div class="flex items-start gap-4 relative z-10 w-full">
-                                    <!-- Larger Icon Box (Job Placeholder/Icon) -->
-                                    <div class="w-14 h-14 rounded-xl bg-finland-blue/10 flex items-center justify-center text-finland-blue border border-finland-blue/20 shrink-0 group-hover:scale-110 transition-transform shadow-lg shadow-black/30">
-                                        <i class="${job.icon} text-2xl"></i>
-                                    </div>
-                                    <div class="flex-grow min-w-0">
-                                        <!-- Larger Title -->
-                                        <h4 class="text-xl md:text-lg font-bold text-white group-hover:text-finland-sky transition-colors mb-1 leading-tight">${job.title}</h4>
-                                        <!-- Experience/Details placeholder -->
-                                        <span class="text-gray-300 md:text-gray-400 text-base md:text-sm font-medium">${job.exp}</span>
-                                    </div>
-                                </div>
-                                <!-- Price Holder -->
-                                <div class="mt-3 md:mt-0 md:ml-4 relative z-10 w-full md:w-auto text-right">
-                                    <span class="inline-block bg-brand-gold/10 border border-brand-gold/30 text-brand-gold font-bold px-3 py-1 rounded-lg text-lg md:text-base tracking-wide whitespace-nowrap">${job.euro}</span>
-                                </div>
-                            </div>
-                        `;
-                    });
+                    let hiddenGrid = `<div id="${hiddenID}" class="grid grid-cols-2 md:grid-cols-3 gap-6 hidden transition-all duration-500">`;
+                    hiddenJobs.forEach(job => hiddenGrid += renderCard(job));
                     hiddenGrid += `</div>`;
                     
                     moreHTML = `
@@ -1103,7 +1145,13 @@
                 totalShown += jobs.length;
             }
             
-            countLabel.innerText = `Showing ${totalShown} positions in ${currentCategory === 'All' ? 'all departments' : currentCategory}`;
+            // Update Count Label
+            if (currentSearchTerm) {
+                 countLabel.innerText = `Found ${totalShown} result${totalShown !== 1 ? 's' : ''} for "${currentSearchTerm}"`;
+            } else {
+                 countLabel.innerText = `Showing ${totalShown} positions in ${currentCategory === 'All' ? 'all departments' : currentCategory}`;
+            }
+            
             checkScroll();
         }
 
@@ -1111,6 +1159,21 @@
             currentCategory = category;
             renderCategoryButtons();
             // Re-render the jobs with the new filter applied
+            renderJobs(jobsData);
+        }
+        
+        // NEW: Handle Search Input
+        function handleSearch(val) {
+            currentSearchTerm = val;
+            renderJobs(jobsData);
+        }
+        
+        // NEW: Clear Filters
+        function clearFilters() {
+            currentCategory = 'All';
+            currentSearchTerm = '';
+            document.getElementById('jobSearchInput').value = '';
+            renderCategoryButtons();
             renderJobs(jobsData);
         }
 
@@ -1141,7 +1204,7 @@
 
                     return `
                     <button onclick="selectCategory('${cat}')" 
-                        class="px-4 py-3 rounded-xl text-sm md:text-base font-bold transition-all border flex items-center justify-center text-center h-full ${activeClass}">
+                        class="px-4 py-3 rounded-xl text-sm md:text-base font-bold transition-all border flex items-center justify-center text-center h-full min-w-[150px] md:min-w-0 flex-shrink-0 snap-center whitespace-nowrap ${activeClass}">
                         ${translatedName}
                     </button>
                 `}).join('');
